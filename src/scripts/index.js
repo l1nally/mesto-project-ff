@@ -1,12 +1,7 @@
 import "../pages/index.css";
 import { createCard, deleteCard, likeCard } from "../components/card";
 import { initialCards } from "../components/cards";
-import {
-  addClass,
-  addListener,
-  openPopUp,
-  closePopUp,
-} from "../components/modal";
+import { openPopUp, closePopUp } from "../components/modal";
 
 // @todo: Находим DOM-элементы
 const cardsContainer = document.querySelector(".places__list");
@@ -17,10 +12,6 @@ const popUps = document.querySelectorAll(".popup");
 const popupTypeNewCard = document.querySelector(".popup_type_new-card");
 const popupTypeEdit = document.querySelector(".popup_type_edit");
 const popupTypeImage = document.querySelector(".popup_type_image");
-const popUpCloseBtnTypeEdit = popupTypeEdit.querySelector(".popup__close");
-const popUpCloseBtnTypeNewCard =
-  popupTypeNewCard.querySelector(".popup__close");
-const popUpCloseBtnTypeImage = popupTypeImage.querySelector(".popup__close");
 const popUpImage = popupTypeImage.querySelector(".popup__image");
 const popUpCaption = popupTypeImage.querySelector(".popup__caption");
 
@@ -44,11 +35,6 @@ const profileDescription = document.querySelector(".profile__description");
 initialCards.forEach(function addCards(item) {
   const cardContent = createCard(item, deleteCard, likeCard, openPopUpImage);
   cardsContainer.append(cardContent);
-});
-
-// @todo: Добавляем анимацию для попапов
-popUps.forEach(function (element) {
-  addClass(element, "popup_is-animated");
 });
 
 // @todo: Функция добавления новой карточки
@@ -87,10 +73,10 @@ function addProfileValues() {
 }
 
 // @todo: Функция открытия изображения в попапе
-function openPopUpImage(image, titleOfPlace) {
-  popUpImage.src = image.src;
-  popUpImage.alt = `На картинке ${titleOfPlace.textContent}`;
-  popUpCaption.textContent = titleOfPlace.textContent;
+function openPopUpImage(link, name) {
+  popUpImage.src = link;
+  popUpImage.alt = name;
+  popUpCaption.textContent = name;
   openPopUp(popupTypeImage);
 }
 
@@ -101,17 +87,31 @@ profileEditButton.addEventListener("click", () => {
 });
 profileAddButton.addEventListener("click", () => openPopUp(popupTypeNewCard));
 
-// @todo: Добавляем обработчики событий для закрытия попапов
-popUpCloseBtnTypeEdit.addEventListener("click", () =>
-  closePopUp(popupTypeEdit)
-);
-popUpCloseBtnTypeNewCard.addEventListener("click", () =>
-  closePopUp(popupTypeNewCard)
-);
-popUpCloseBtnTypeImage.addEventListener("click", () =>
-  closePopUp(popupTypeImage)
-);
+// @todo: Универсальное закрытие всех попапов
+popUps.forEach((popup) => {
+  const closeButton = popup.querySelector(".popup__close");
+
+  closeButton.addEventListener("click", () => closePopUp(popup));
+
+  popup.addEventListener("mousedown", (event) => {
+    if (event.target === event.currentTarget) {
+      closePopUp(popup);
+    }
+  });
+
+  popup.classList.add("popup_is-animated");
+});
+
+// @todo: Закрытие попапов по клавише Esc
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    const openedPopup = document.querySelector(".popup_is-opened");
+    if (openedPopup) {
+      closePopUp(openedPopup);
+    }
+  }
+});
 
 // @todo: Добавляем обработчики событий для форм
-addListener(formElementTypeEdit, "submit", addNewProfile);
-addListener(formElementTypeNewCard, "submit", addNewCard);
+formElementTypeEdit.addEventListener("submit", addNewProfile);
+formElementTypeNewCard.addEventListener("submit", addNewCard);

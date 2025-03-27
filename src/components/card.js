@@ -10,12 +10,12 @@ function createCard(cardData, fnForRemove, fnForLike, openPopUpImage) {
 
   cardTitle.textContent = cardData.name;
   cardImage.src = cardData.link;
-  cardImage.alt = `На картинке ${cardData.name}`;
+  cardImage.alt = cardData.name;
 
   deleteButton.addEventListener("click", () => fnForRemove(card));
   likeButton.addEventListener("click", () => fnForLike(likeButton));
   cardImage.addEventListener("click", () =>
-    openPopUpImage(cardImage, cardTitle)
+    openPopUpImage(cardData.link, cardData.name)
   );
 
   return card;
