@@ -77,25 +77,27 @@ function openPopUpImage(link, name) {
   popUpImage.src = link;
   popUpImage.alt = name;
   popUpCaption.textContent = name;
-  openPopUp(popupTypeImage);
+  openPopupWithEsc(popupTypeImage);
 }
 
 // @todo: Добавляем обработчики событий для открытия попапов
 profileEditButton.addEventListener("click", () => {
-  openPopUp(popupTypeEdit);
+  openPopupWithEsc(popupTypeEdit);
   addProfileValues();
 });
-profileAddButton.addEventListener("click", () => openPopUp(popupTypeNewCard));
+profileAddButton.addEventListener("click", () =>
+  openPopupWithEsc(popupTypeNewCard)
+);
 
 // @todo: Универсальное закрытие всех попапов
 popUps.forEach((popup) => {
   const closeButton = popup.querySelector(".popup__close");
 
-  closeButton.addEventListener("click", () => closePopUp(popup));
+  closeButton.addEventListener("click", () => closePopupWithEsc(popup));
 
   popup.addEventListener("mousedown", (event) => {
     if (event.target === event.currentTarget) {
-      closePopUp(popup);
+      closePopupWithEsc(popup);
     }
   });
 
@@ -103,14 +105,24 @@ popUps.forEach((popup) => {
 });
 
 // @todo: Закрытие попапов по клавише Esc
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
+function handleEscClose(evt) {
+  if (evt.key === "Escape") {
     const openedPopup = document.querySelector(".popup_is-opened");
     if (openedPopup) {
-      closePopUp(openedPopup);
+      closePopupWithEsc(openedPopup);
     }
   }
-});
+}
+
+function openPopupWithEsc(popup) {
+  openPopUp(popup);
+  document.addEventListener("keydown", handleEscClose);
+}
+
+function closePopupWithEsc(popup) {
+  closePopUp(popup);
+  document.removeEventListener("keydown", handleEscClose);
+}
 
 // @todo: Добавляем обработчики событий для форм
 formElementTypeEdit.addEventListener("submit", addNewProfile);
