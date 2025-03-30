@@ -12,6 +12,10 @@ const popUps = document.querySelectorAll(".popup");
 const popupTypeNewCard = document.querySelector(".popup_type_new-card");
 const popupTypeEdit = document.querySelector(".popup_type_edit");
 const popupTypeImage = document.querySelector(".popup_type_image");
+const popUpCloseBtnTypeEdit = popupTypeEdit.querySelector(".popup__close");
+const popUpCloseBtnTypeNewCard =
+  popupTypeNewCard.querySelector(".popup__close");
+const popUpCloseBtnTypeImage = popupTypeImage.querySelector(".popup__close");
 const popUpImage = popupTypeImage.querySelector(".popup__image");
 const popUpCaption = popupTypeImage.querySelector(".popup__caption");
 
@@ -77,52 +81,28 @@ function openPopUpImage(link, name) {
   popUpImage.src = link;
   popUpImage.alt = name;
   popUpCaption.textContent = name;
-  openPopupWithEsc(popupTypeImage);
+  openPopUp(popupTypeImage);
 }
 
 // @todo: Добавляем обработчики событий для открытия попапов
 profileEditButton.addEventListener("click", () => {
-  openPopupWithEsc(popupTypeEdit);
+  openPopUp(popupTypeEdit);
   addProfileValues();
 });
-profileAddButton.addEventListener("click", () =>
-  openPopupWithEsc(popupTypeNewCard)
-);
+profileAddButton.addEventListener("click", () => openPopUp(popupTypeNewCard));
 
-// @todo: Универсальное закрытие всех попапов
-popUps.forEach((popup) => {
+// @todo: Добавляем обработчики событий для закрытия попапов
+const popups = document.querySelectorAll(".popup");
+popups.forEach((popup) => {
   const closeButton = popup.querySelector(".popup__close");
-
-  closeButton.addEventListener("click", () => closePopupWithEsc(popup));
-
+  closeButton.addEventListener("click", () => closePopUp(popup));
   popup.addEventListener("mousedown", (event) => {
     if (event.target === event.currentTarget) {
-      closePopupWithEsc(popup);
+      closePopUp(popup);
     }
   });
-
   popup.classList.add("popup_is-animated");
 });
-
-// @todo: Закрытие попапов по клавише Esc
-function handleEscClose(evt) {
-  if (evt.key === "Escape") {
-    const openedPopup = document.querySelector(".popup_is-opened");
-    if (openedPopup) {
-      closePopupWithEsc(openedPopup);
-    }
-  }
-}
-
-function openPopupWithEsc(popup) {
-  openPopUp(popup);
-  document.addEventListener("keydown", handleEscClose);
-}
-
-function closePopupWithEsc(popup) {
-  closePopUp(popup);
-  document.removeEventListener("keydown", handleEscClose);
-}
 
 // @todo: Добавляем обработчики событий для форм
 formElementTypeEdit.addEventListener("submit", addNewProfile);
