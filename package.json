@@ -2,6 +2,7 @@
   "name": "mesto-project-ff",
   "version": "1.0.0",
   "description": "https://github.com/l1nally/mesto-project-ff.git",
+  "homepage": "https://l1nally.github.io/mesto-project-ff",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -21,6 +22,7 @@
     "css-loader": "^7.1.2",
     "cssnano": "^7.0.6",
     "file-loader": "^6.2.0",
+    "gh-pages": "^6.3.0",
     "html-webpack-plugin": "^5.6.3",
     "mini-css-extract-plugin": "^2.9.2",
     "postcss": "^8.5.3",
