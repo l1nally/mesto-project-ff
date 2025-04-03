@@ -20,6 +20,7 @@ import {
   deleteCard as apiDeleteCard,
   toggleLike as apiToggleLike,
 } from "./api.js";
+import { updateButtonState } from "./utils.js";
 
 // @todo: Находим DOM-элементы
 const profileImage = document.querySelector(".profile__image");
@@ -112,17 +113,6 @@ function renderCards(cards, userId) {
   });
 }
 
-// @todo: Функция обновления состояния кнопки
-const updateButtonState = (button, isLoading) => {
-  if (isLoading) {
-    button.textContent = "Сохранение...";
-    button.disabled = true;
-  } else {
-    button.textContent = "Сохранить";
-    button.disabled = false;
-  }
-};
-
 // @todo: Функция редактирования профиля
 function addNewProfile(evt) {
   evt.preventDefault();
@@ -181,6 +171,11 @@ function addNewCard(evt) {
       );
       cardsContainer.prepend(newCardElement);
       formElementTypeNewCard.reset();
+      clearValidationErrors(formElementTypeNewCard, validationConfig);
+      const inputList = Array.from(
+        formElementTypeNewCard.querySelectorAll(".popup__input")
+      );
+      toggleButtonState(inputList, button, validationConfig);
       closePopUp(popupTypeNewCard);
     })
     .catch((err) => console.error("Ошибка при добавлении карточки:", err))
@@ -188,7 +183,6 @@ function addNewCard(evt) {
 }
 
 profileAddButton.addEventListener("click", () => {
-  clearValidationErrors(formElementTypeNewCard, validationConfig);
   openPopUp(popupTypeNewCard);
   const inputList = Array.from(
     formElementTypeNewCard.querySelectorAll(".popup__input")
@@ -200,7 +194,6 @@ profileAddButton.addEventListener("click", () => {
 formElementTypeNewCard.addEventListener("submit", addNewCard);
 
 profileImage.addEventListener("click", () => {
-  clearValidationErrors(formElementTypeAvatar, validationConfig);
   openPopUp(popupTypeAvatar);
 });
 
@@ -234,9 +227,6 @@ popUpCloseButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const popup = button.closest(".popup");
     closePopUp(popup);
-    if (popup === popupTypeNewCard) {
-      formElementTypeNewCard.reset();
-    }
   });
 });
 
@@ -245,10 +235,6 @@ popups.forEach((popup) => {
   popup.addEventListener("click", (event) => {
     if (event.target === popup) {
       closePopUp(popup);
-      const form = popup.querySelector(".popup__form");
-      if (form) {
-        form.reset();
-      }
     }
   });
 });

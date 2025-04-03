@@ -10,29 +10,19 @@ const checkResponse = (res) => {
   if (res.ok) {
     return res.json();
   }
-  return res
-    .json()
-    .then((err) =>
-      Promise.reject(`Ошибка: ${res.status} - ${err.message || err}`)
-    );
+  return Promise.reject(`Ошибка: ${res.status}`);
 };
 
 export const getUserInfo = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
-  })
-    .then(checkResponse)
-    .catch((err) =>
-      console.error("Ошибка при загрузке данных пользователя:", err)
-    );
+  }).then(checkResponse);
 };
 
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
-  })
-    .then(checkResponse)
-    .catch((err) => console.error("Ошибка при загрузке карточек:", err));
+  }).then(checkResponse);
 };
 
 export const updateUserProfile = (name, about) => {
@@ -40,9 +30,7 @@ export const updateUserProfile = (name, about) => {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({ name, about }),
-  })
-    .then(checkResponse)
-    .catch((err) => console.error("Ошибка при обновлении профиля:", err));
+  }).then(checkResponse);
 };
 
 export const updateAvatar = (avatar) => {
@@ -50,9 +38,7 @@ export const updateAvatar = (avatar) => {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({ avatar }),
-  })
-    .then(checkResponse)
-    .catch((err) => console.error("Ошибка при обновлении аватара:", err));
+  }).then(checkResponse);
 };
 
 export const addNewCard = (name, link) => {
@@ -60,25 +46,19 @@ export const addNewCard = (name, link) => {
     method: "POST",
     headers: config.headers,
     body: JSON.stringify({ name, link }),
-  })
-    .then(checkResponse)
-    .catch((err) => console.error("Ошибка при добавлении карточки:", err));
+  }).then(checkResponse);
 };
 
 export const deleteCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  })
-    .then((res) => (res.ok ? Promise.resolve() : checkResponse(res)))
-    .catch((err) => console.error("Ошибка при удалении карточки:", err));
+  }).then(checkResponse);
 };
 
 export const toggleLike = (cardId, isLiked) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: isLiked ? "DELETE" : "PUT",
     headers: config.headers,
-  })
-    .then(checkResponse)
-    .catch((err) => console.error("Ошибка при изменении лайка:", err));
+  }).then(checkResponse);
 };

@@ -1,3 +1,9 @@
+const cardTemplate = document.querySelector("#card-template").content;
+
+function getCardTemplate() {
+  return cardTemplate.cloneNode(true).querySelector(".card");
+}
+
 export function createCard(
   cardData,
   deleteCallback,
@@ -5,8 +11,7 @@ export function createCard(
   imageCallback,
   userId
 ) {
-  const cardTemplate = document.querySelector("#card-template").content;
-  const cardElement = cardTemplate.cloneNode(true).querySelector(".card");
+  const cardElement = getCardTemplate();
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
   const deleteButton = cardElement.querySelector(".card__delete-button");

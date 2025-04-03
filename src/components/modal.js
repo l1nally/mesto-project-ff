@@ -24,10 +24,6 @@ export function closeModalOnOverlay(popup) {
   popup.addEventListener("click", (event) => {
     if (event.target === popup) {
       closePopUp(popup);
-      const form = popup.querySelector(".popup__form");
-      if (form) {
-        form.reset();
-      }
     }
   });
 }
